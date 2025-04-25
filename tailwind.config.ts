@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -86,6 +85,14 @@ export default {
 				'rotate-slow': {
 					from: { transform: 'rotate(0deg)' },
 					to: { transform: 'rotate(360deg)' }
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'glow-pulse': {
+					'0%, 100%': { opacity: '1', boxShadow: '0 0 15px rgba(14, 165, 233, 0.5)' },
+					'50%': { opacity: '0.8', boxShadow: '0 0 30px rgba(14, 165, 233, 0.8)' }
 				}
 			},
 			animation: {
@@ -93,9 +100,11 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.4s ease-out',
 				'pulse-gentle': 'pulse-gentle 2s ease-in-out infinite',
-				'rotate-slow': 'rotate-slow 8s linear infinite'
+				'rotate-slow': 'rotate-slow 8s linear infinite',
+				'float': 'float 3s ease-in-out infinite',
+				'glow-pulse': 'glow-pulse 2s ease-in-out infinite'
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [require("tailwindcss-animate")]
 } satisfies Config;

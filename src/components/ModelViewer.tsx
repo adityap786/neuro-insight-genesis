@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stage, useGLTF, Environment, PerspectiveCamera } from '@react-three/drei';
@@ -8,19 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RotateCw, ZoomIn, ZoomOut, Maximize2, Minimize2 } from "lucide-react";
 import { motion } from "framer-motion";
 
-// Placeholder Model component that renders a brain-like shape
 const BrainModel = ({ abnormalityHighlight = false }) => {
-  // In a real app, this would load an actual model converted from the MRI
-  // For the demo, we'll create a simple sphere to represent a brain
   return (
     <group>
-      {/* Base brain model */}
       <mesh>
         <sphereGeometry args={[2, 32, 32]} />
         <meshStandardMaterial color="#7c7c7c" roughness={0.4} />
       </mesh>
       
-      {/* Abnormality highlight (only shown when flagged) */}
       {abnormalityHighlight && (
         <mesh position={[0.8, 0.5, 1.2]}>
           <sphereGeometry args={[0.4, 16, 16]} />
@@ -62,13 +56,9 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ imageFile, abnormalityDetecte
     };
   }, []);
 
-  // Simulated loading of the 3D model from the image file
-  // In a real application, this would be an actual conversion/rendering process
   useEffect(() => {
     if (imageFile) {
-      // Simulate loading with a simple log
       console.log(`Processing ${imageFile.name} for 3D visualization...`);
-      // Real implementation would involve image processing and model creation
     }
   }, [imageFile]);
 
@@ -80,21 +70,35 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ imageFile, abnormalityDetecte
       transition={{ duration: 0.5, delay: 0.1 }}
       className="w-full h-full"
     >
-      <Card className="neo-blur h-full flex flex-col">
+      <Card className="neo-blur h-full flex flex-col card-gradient">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-center">
             <CardTitle className="text-gradient">3D Brain Visualization</CardTitle>
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon" onClick={toggleFullscreen}>
-                {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+            <motion.div 
+              className="flex gap-2"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={toggleFullscreen}
+                className="hover-glow"
+              >
+                {isFullscreen ? (
+                  <Minimize2 className="h-4 w-4" />
+                ) : (
+                  <Maximize2 className="h-4 w-4" />
+                )}
               </Button>
-            </div>
+            </motion.div>
           </div>
         </CardHeader>
         <CardContent className="flex-grow p-0 relative">
           <Tabs defaultValue="3d" className="h-full flex flex-col">
             <div className="px-4">
-              <TabsList className="grid grid-cols-4 mb-2">
+              <TabsList className="grid grid-cols-4 mb-2 glass-panel">
                 <TabsTrigger value="3d" onClick={() => setViewMode('3d')}>3D View</TabsTrigger>
                 <TabsTrigger value="axial" onClick={() => setViewMode('axial')}>Axial</TabsTrigger>
                 <TabsTrigger value="coronal" onClick={() => setViewMode('coronal')}>Coronal</TabsTrigger>
@@ -125,12 +129,12 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ imageFile, abnormalityDetecte
               
               {abnormalityDetected && (
                 <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="absolute bottom-4 left-4 right-4 bg-red-500/20 text-white p-3 rounded-md backdrop-blur-sm border border-red-500/30"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute bottom-4 left-4 right-4 glass-panel bg-red-500/20 text-white p-3 rounded-md border border-red-500/30"
                 >
                   <div className="flex items-center">
-                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2 animate-pulse-gentle"></div>
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2 animate-pulse"></div>
                     <p className="text-sm font-medium">Abnormality detected in temporal lobe region</p>
                   </div>
                 </motion.div>
