@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stage, useGLTF, Environment, PerspectiveCamera } from '@react-three/drei';
@@ -8,24 +9,61 @@ import { RotateCw, ZoomIn, ZoomOut, Maximize2, Minimize2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const BrainModel = ({ abnormalityHighlight = false }) => {
+  // This will be replaced with your actual GLTF model path
+  // const { scene } = useGLTF('/path-to-your-model.gltf');
+  
+  // Temporary geometric brain representation
   return (
     <group>
+      {/* Base brain model */}
       <mesh>
-        <sphereGeometry args={[2, 32, 32]} />
-        <meshStandardMaterial color="#7c7c7c" roughness={0.4} />
+        <sphereGeometry args={[2, 64, 64]} />
+        <meshStandardMaterial 
+          color="#8B7355"
+          roughness={0.3}
+          metalness={0.2}
+        />
       </mesh>
-      
+
+      {/* Abnormality regions */}
       {abnormalityHighlight && (
-        <mesh position={[0.8, 0.5, 1.2]}>
-          <sphereGeometry args={[0.4, 16, 16]} />
-          <meshStandardMaterial 
-            color="#ea384c"
-            emissive="#ff0000"
-            emissiveIntensity={0.5}
-            transparent
-            opacity={0.8}
-          />
-        </mesh>
+        <>
+          {/* Necrotic core */}
+          <mesh position={[0.8, 0.5, 1.2]}>
+            <sphereGeometry args={[0.4, 32, 32]} />
+            <meshStandardMaterial 
+              color="#ea384c"
+              emissive="#ff0000"
+              emissiveIntensity={0.8}
+              transparent
+              opacity={0.8}
+            />
+          </mesh>
+          
+          {/* Peritumoral edema */}
+          <mesh position={[1, 0.3, 1]}>
+            <sphereGeometry args={[0.6, 32, 32]} />
+            <meshStandardMaterial 
+              color="#4ade80"
+              emissive="#00ff00"
+              emissiveIntensity={0.3}
+              transparent
+              opacity={0.4}
+            />
+          </mesh>
+          
+          {/* Enhancing tumor */}
+          <mesh position={[0.6, 0.7, 1.4]}>
+            <sphereGeometry args={[0.3, 32, 32]} />
+            <meshStandardMaterial 
+              color="#3b82f6"
+              emissive="#0000ff"
+              emissiveIntensity={0.5}
+              transparent
+              opacity={0.6}
+            />
+          </mesh>
+        </>
       )}
     </group>
   );
@@ -125,23 +163,44 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ imageFile, abnormalityDetecte
                 </Button>
               </div>
               <Canvas>
-                <PerspectiveCamera makeDefault position={[0, 0, 6]} />
-                <Environment preset="city" />
+                <PerspectiveCamera makeDefault position={[0, 2, 8]} />
+                <Environment preset="studio" />
                 <ambientLight intensity={0.8} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
+                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
                 <BrainModel abnormalityHighlight={abnormalityDetected} />
-                <OrbitControls />
+                <OrbitControls 
+                  enableDamping
+                  dampingFactor={0.05}
+                  minDistance={4}
+                  maxDistance={12}
+                />
               </Canvas>
               
               {abnormalityDetected && (
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="absolute bottom-4 left-4 right-4 glass-panel bg-red-500/20 text-white p-3 rounded-md border border-red-500/30"
+                  className="absolute bottom-4 left-4 right-4 glass-panel bg-red-500/20 text-white p-4 rounded-md border border-red-500/30"
                 >
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2 animate-pulse"></div>
-                    <p className="text-sm font-medium">Abnormality detected in temporal lobe region</p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                      <p className="text-sm font-medium">Abnormalities Detected</p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                        <span>Necrotic Core</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Peritumoral Edema</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span>Enhancing Tumor</span>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               )}
