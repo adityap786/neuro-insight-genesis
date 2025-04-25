@@ -1,73 +1,12 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stage, useGLTF, Environment, PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls, Stage, Environment, PerspectiveCamera } from '@react-three/drei';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RotateCw, ZoomIn, ZoomOut, Maximize2, Minimize2 } from "lucide-react";
 import { motion } from "framer-motion";
-
-const BrainModel = ({ abnormalityHighlight = false }) => {
-  // This will be replaced with your actual GLTF model path
-  // const { scene } = useGLTF('/path-to-your-model.gltf');
-  
-  // Temporary geometric brain representation
-  return (
-    <group>
-      {/* Base brain model */}
-      <mesh>
-        <sphereGeometry args={[2, 64, 64]} />
-        <meshStandardMaterial 
-          color="#8B7355"
-          roughness={0.3}
-          metalness={0.2}
-        />
-      </mesh>
-
-      {/* Abnormality regions */}
-      {abnormalityHighlight && (
-        <>
-          {/* Necrotic core */}
-          <mesh position={[0.8, 0.5, 1.2]}>
-            <sphereGeometry args={[0.4, 32, 32]} />
-            <meshStandardMaterial 
-              color="#ea384c"
-              emissive="#ff0000"
-              emissiveIntensity={0.8}
-              transparent
-              opacity={0.8}
-            />
-          </mesh>
-          
-          {/* Peritumoral edema */}
-          <mesh position={[1, 0.3, 1]}>
-            <sphereGeometry args={[0.6, 32, 32]} />
-            <meshStandardMaterial 
-              color="#4ade80"
-              emissive="#00ff00"
-              emissiveIntensity={0.3}
-              transparent
-              opacity={0.4}
-            />
-          </mesh>
-          
-          {/* Enhancing tumor */}
-          <mesh position={[0.6, 0.7, 1.4]}>
-            <sphereGeometry args={[0.3, 32, 32]} />
-            <meshStandardMaterial 
-              color="#3b82f6"
-              emissive="#0000ff"
-              emissiveIntensity={0.5}
-              transparent
-              opacity={0.6}
-            />
-          </mesh>
-        </>
-      )}
-    </group>
-  );
-};
+import BrainModel from './models/BrainModel';
 
 interface ModelViewerProps {
   imageFile: File | null;
@@ -166,7 +105,13 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ imageFile, abnormalityDetecte
                 <PerspectiveCamera makeDefault position={[0, 2, 8]} />
                 <Environment preset="studio" />
                 <ambientLight intensity={0.8} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
+                <spotLight 
+                  position={[10, 10, 10]} 
+                  angle={0.15} 
+                  penumbra={1} 
+                  intensity={1.5} 
+                  castShadow 
+                />
                 <BrainModel abnormalityHighlight={abnormalityDetected} />
                 <OrbitControls 
                   enableDamping
