@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BrainCog } from 'lucide-react';
+import { Brain } from 'lucide-react';
 
 const Header = () => {
   return (
@@ -16,7 +16,7 @@ const Header = () => {
           whileHover={{ rotate: 15, scale: 1.1 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
-          <BrainCog className="h-8 w-8 text-neuro-accent" />
+          <Brain className="h-8 w-8 text-neuro-accent" />
         </motion.div>
         <div>
           <motion.h1 
@@ -25,7 +25,7 @@ const Header = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            NeuroInsight
+            NeuroVision
           </motion.h1>
           <motion.p 
             className="text-sm text-muted-foreground"

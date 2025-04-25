@@ -18,7 +18,13 @@ const BrainModel = ({ abnormalityHighlight = false }) => {
       {abnormalityHighlight && (
         <mesh position={[0.8, 0.5, 1.2]}>
           <sphereGeometry args={[0.4, 16, 16]} />
-          <meshStandardMaterial color="#e5534b" emissive="#ff0000" emissiveIntensity={0.5} />
+          <meshStandardMaterial 
+            color="#ea384c"
+            emissive="#ff0000"
+            emissiveIntensity={0.5}
+            transparent
+            opacity={0.8}
+          />
         </mesh>
       )}
     </group>
